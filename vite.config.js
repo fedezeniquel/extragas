@@ -4,6 +4,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // El SDK de Firebase (Firestore + Auth) empuja el bundle por encima del
+  // límite default de 500kB; es peso esperado, no una señal de código sin
+  // trocear.
+  build: {
+    chunkSizeWarningLimit: 900,
+  },
   plugins: [
     react(),
     VitePWA({

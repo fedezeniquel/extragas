@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TIPO_VENTA } from '../db'
+import { TIPO_VENTA } from '../firebase'
 import { cn } from '../lib/cn'
 import { Modal } from './Modal'
 import { Stepper } from './Stepper'

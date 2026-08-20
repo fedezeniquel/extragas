@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useStock } from './hooks/useStock'
-import { TIPO_INICIAL, TIPO_VENTA } from './db'
+import { TIPO_INICIAL, TIPO_VENTA } from './firebase'
 import { dispararConfetti } from './lib/confetti'
 import { Header } from './components/Header'
 import { StockRing } from './components/StockRing'

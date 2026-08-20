@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react'
-import { TIPO_VENTA } from '../db'
+import { TIPO_VENTA } from '../firebase'
 import { cn } from '../lib/cn'
 
 function resumenCantidades(m) {
