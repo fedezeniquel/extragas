@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import { cn } from '../lib/cn'
 
-export function Stepper({ value, onDelta, nombre }) {
+export function Stepper({ value, onDelta, nombre, max = Infinity }) {
   const timeoutRef = useRef(null)
   const intervalRef = useRef(null)
+  const alTope = value >= max
 
   function stop() {
     clearTimeout(timeoutRef.current)
@@ -44,9 +45,10 @@ export function Stepper({ value, onDelta, nombre }) {
       <button
         type="button"
         aria-label={nombre ? `Sumar ${nombre}` : 'Sumar'}
+        disabled={alTope}
         className={cn(
           'flex h-12 w-12 items-center justify-center rounded-xl bg-brand-purple',
-          'active:scale-95 active:brightness-110',
+          'active:scale-95 active:brightness-110 disabled:opacity-30',
         )}
         onPointerDown={() => start(1)}
         onPointerUp={stop}

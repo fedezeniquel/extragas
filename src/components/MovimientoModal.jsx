@@ -6,7 +6,7 @@ import { Stepper } from './Stepper'
 
 const LABELS = { g10: '10 kg', g15: '15 kg', g45: '45 kg' }
 
-export function MovimientoModal({ tipo, onClose, onGuardar }) {
+export function MovimientoModal({ tipo, stock, onClose, onGuardar }) {
   const [cantidades, setCantidades] = useState({ g10: 0, g15: 0, g45: 0 })
   const [nota, setNota] = useState('')
   const [guardando, setGuardando] = useState(false)
@@ -14,8 +14,15 @@ export function MovimientoModal({ tipo, onClose, onGuardar }) {
   const total = cantidades.g10 + cantidades.g15 + cantidades.g45
   const esVenta = tipo === TIPO_VENTA
 
+  function maxDe(key) {
+    return esVenta ? stock[key] : Infinity
+  }
+
   function delta(key, d) {
-    setCantidades((prev) => ({ ...prev, [key]: Math.max(0, prev[key] + d) }))
+    setCantidades((prev) => ({
+      ...prev,
+      [key]: Math.min(maxDe(key), Math.max(0, prev[key] + d)),
+    }))
   }
 
   async function guardar() {
@@ -29,8 +36,16 @@ export function MovimientoModal({ tipo, onClose, onGuardar }) {
       <div className="flex flex-col gap-4">
         {Object.entries(LABELS).map(([key, label]) => (
           <div key={key} className="flex items-center justify-between">
-            <span className="font-semibold text-white/80">{label}</span>
-            <Stepper value={cantidades[key]} onDelta={(d) => delta(key, d)} nombre={label} />
+            <div className="flex flex-col">
+              <span className="font-semibold text-white/80">{label}</span>
+              {esVenta && <span className="text-xs text-white/40">Disponible: {stock[key]}</span>}
+            </div>
+            <Stepper
+              value={cantidades[key]}
+              onDelta={(d) => delta(key, d)}
+              nombre={label}
+              max={maxDe(key)}
+            />
           </div>
         ))}
 

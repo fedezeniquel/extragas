@@ -1,18 +1,19 @@
 import { useMemo, useState } from 'react'
 import { useStock } from './hooks/useStock'
 import { TIPO_INICIAL, TIPO_VENTA } from './firebase'
-import { dispararConfetti } from './lib/confetti'
 import { Header } from './components/Header'
 import { StockRing } from './components/StockRing'
 import { GasCardGrid } from './components/GasCardGrid'
 import { MovimientoModal } from './components/MovimientoModal'
 import { ConfirmDialog } from './components/ConfirmDialog'
 import { Historial } from './components/Historial'
+import { Toast } from './components/Toast'
 
 function App() {
   const { movimientos, stock, agregarMovimiento, eliminarMovimiento } = useStock()
   const [modalTipo, setModalTipo] = useState(null)
   const [idAEliminar, setIdAEliminar] = useState(null)
+  const [aviso, setAviso] = useState(null)
 
   const totalInicial = useMemo(
     () =>
@@ -28,7 +29,7 @@ function App() {
     await agregarMovimiento({ tipo: modalTipo, ...datos })
     const fueVenta = modalTipo === TIPO_VENTA
     setModalTipo(null)
-    if (fueVenta) dispararConfetti()
+    if (fueVenta) setAviso('Venta registrada')
   }
 
   async function confirmarEliminar() {
@@ -71,6 +72,7 @@ function App() {
       {modalTipo && (
         <MovimientoModal
           tipo={modalTipo}
+          stock={stock}
           onClose={() => setModalTipo(null)}
           onGuardar={handleGuardar}
         />
@@ -83,6 +85,8 @@ function App() {
           onConfirm={confirmarEliminar}
         />
       )}
+
+      {aviso && <Toast mensaje={aviso} onDone={() => setAviso(null)} />}
     </div>
   )
 }
