@@ -64,7 +64,7 @@ function App() {
         </div>
 
         <section>
-          <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-white/50">Historial de hoy</h2>
+          <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-white/50">Historial de la semana</h2>
           <Historial movimientos={movimientos} onEliminar={setIdAEliminar} />
         </section>
       </main>

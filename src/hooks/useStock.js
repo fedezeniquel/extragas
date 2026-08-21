@@ -1,13 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { db, listoAuth, TIPO_INICIAL, TIPO_VENTA } from '../firebase'
-
-function fechaHoy() {
-  return new Date().toISOString().slice(0, 10)
-}
+import { fechaLocal, semanaIdActual } from '../lib/fecha'
 
 export function useStock() {
-  const fecha = fechaHoy()
+  const semanaId = semanaIdActual()
   const [movimientos, setMovimientos] = useState(undefined)
 
   useEffect(() => {
@@ -18,7 +15,7 @@ export function useStock() {
       if (cancelado) return
       const q = query(
         collection(db, 'movimientos'),
-        where('fecha', '==', fecha),
+        where('semanaId', '==', semanaId),
         orderBy('ts', 'desc'),
       )
       unsubscribe = onSnapshot(q, (snapshot) => {
@@ -30,7 +27,7 @@ export function useStock() {
       cancelado = true
       unsubscribe()
     }
-  }, [fecha])
+  }, [semanaId])
 
   const stock = useMemo(() => {
     const totales = { g10: 0, g15: 0, g45: 0 }
@@ -47,7 +44,8 @@ export function useStock() {
     await listoAuth
     const ahora = new Date()
     return addDoc(collection(db, 'movimientos'), {
-      fecha: fechaHoy(),
+      fecha: fechaLocal(ahora),
+      semanaId: semanaIdActual(ahora),
       hora: ahora.toTimeString().slice(0, 5),
       tipo,
       g10,
@@ -64,7 +62,7 @@ export function useStock() {
   }
 
   return {
-    fecha,
+    semanaId,
     movimientos: movimientos ?? [],
     cargando: movimientos === undefined,
     stock,

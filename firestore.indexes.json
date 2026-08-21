@@ -4,7 +4,7 @@
       "collectionGroup": "movimientos",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "fecha", "order": "ASCENDING" },
+        { "fieldPath": "semanaId", "order": "ASCENDING" },
         { "fieldPath": "ts", "order": "DESCENDING" }
       ]
     }
